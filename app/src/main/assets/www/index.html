@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#f7f7f8" />
+<title>Suivi de prédication</title>
+<link rel="manifest" href="manifest.json" />
+<link rel="stylesheet" href="styles.css?v=32">
+</head>
+<body>
+<div class="app-error" id="appError" role="alert"></div>
+
+<div class="onboarding hidden" id="onboarding">
+  <div class="onboarding-card">
+    <div class="onboarding-step" id="onboardingWelcome">
+      <img src="icon-192.png" alt="">
+      <h1>Suivi de prédication</h1>
+      <p>Configure ton profil de service pour commencer.</p>
+      <button type="button" class="btn primary" id="onboardingStart">Commencer</button>
+    </div>
+    <div class="onboarding-step hidden" id="onboardingProfile">
+      <h1>Choisis ton profil</h1>
+      <p>Tu pourras le modifier plus tard sans perdre ton historique.</p>
+      <div class="onboarding-options" id="onboardingOptions">
+        <button type="button" data-profile="publisher">Proclamateur</button>
+        <button type="button" data-profile="aux30">Pionnier auxiliaire permanent — 30 h</button>
+        <button type="button" data-profile="regular600">Pionnier permanent — 600 h/an</button>
+        <button type="button" data-profile="special90">Pionnier spécial / Missionnaire — 90 h</button>
+        <button type="button" data-profile="special100">Pionnier spécial / Missionnaire — 100 h</button>
+      </div>
+      <button type="button" class="btn primary" id="onboardingConfirm" disabled>Lancer l’application</button>
+    </div>
+  </div>
+</div>
+
+<div class="app">
+<header class="premium-header">
+  <div>
+    <div class="premium-kicker">Suivi de prédication</div>
+    <div class="premium-subtitle" id="premiumCurrentPeriod">Année de service</div>
+  </div>
+  <img src="icon-192.png" class="premium-app-icon" alt="">
+</header>
+<nav class="tabs"><div class="tabs-inner"><button class="tab active" data-screen="homeScreen"><span>⌂</span>Accueil</button><button class="tab" data-screen="reportScreen"><span>▤</span>Rapport</button><button class="tab" data-screen="calendarScreen"><span>▦</span>Calendrier</button></div></nav>
+<div class="profile-actions"><div class="profilebar"><button class="profilebtn" id="profileButton">Profil : Pionnier permanent</button></div><button class="data-btn home-only" id="dataButton">Sauvegarde</button><button class="sharebtn report-only hidden" id="shareReport" aria-label="Partager le rapport" title="Partager le rapport"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+<path d="M12 3v11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<path d="M8.5 6.5 12 3l3.5 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M7 9H5.8A1.8 1.8 0 0 0 4 10.8v7.4A1.8 1.8 0 0 0 5.8 20h12.4a1.8 1.8 0 0 0 1.8-1.8v-7.4A1.8 1.8 0 0 0 18.2 9H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg></button>  <button type="button" class="top-current-btn" id="topCurrentMonth">Mois en cours</button>
+</div>
+<section class="screen active premium-screen" id="homeScreen">
+  <div class="card summary-main premium-hero-card" id="homeHoursCard">
+    <div class="label" id="homeMonthLabel">Activité de prédication</div>
+    <div class="big"><span id="homeTotal">0</span></div>
+    <div class="breakdown">
+      <div class="break-row"><span>Heures de prédication</span><strong id="homePreach">0 h</strong></div>
+      <div class="break-row"><span>Heures Béthel/LDC</span><strong id="homeBethel">0 h</strong></div>
+      <div class="break-row"><span>Cours bibliques</span><strong id="homeCourses">0</strong></div>
+    </div>
+  </div>
+  <div class="card hidden" id="publisherMonthCard"><div class="label">Activité de prédication</div><div style="font-weight:800;font-size:18px;margin:2px 0 14px" id="publisherMonthLabel"></div><div class="checkcard"><b>Prêché durant le mois</b><input type="checkbox" id="publisherPreached"></div><div class="publisher-course-label">Cours bibliques : <span id="publisherCourses">0</span></div></div>
+  <div class="publisher-actions hidden" id="publisherAuxActions"><button type="button" id="publisherAux15">Pionnier auxiliaire 15 h</button><button type="button" id="publisherAux30">Pionnier auxiliaire 30 h</button></div>
+  <div class="card" id="homeGoalCard">
+    <h2 class="section-title">Objectif du mois</h2>
+    <div class="objective">
+      <div class="metric"><span>Total heures</span><b id="homeGoal">0 h</b></div>
+      <div class="metric"><span>Encore à faire</span><b id="homeLeft">0 h</b></div>
+    </div>
+    <div class="progress"><div id="homeProgress"></div></div>
+  </div>
+  <div class="card recent" id="recentCard">
+    <button class="recent-toggle" id="recentToggle" type="button" aria-expanded="false">
+      <h2 class="section-title">Dernières activités</h2><span class="recent-arrow">⌄</span>
+    </button>
+    <div class="recent-content" id="recentContent"><div id="recentLogs"></div></div>
+<div class="add-activity-row"><button class="fab" id="addActivity" aria-label="Ajouter une activité">+</button></div>
+
+  </div>
+  
+</section>
+
+<section class="screen premium-screen" id="reportScreen">
+  <button class="smallbtn quick-return current-period-btn" id="reportCurrent" class="smallbtn quick-return current-period-btn">Mois en cours</button>
+  <div class="segmented"><button class="active" id="reportMonthTab">Mois</button><button id="reportYearTab">Année</button></div>
+  
+  <div id="monthReport">
+    <div class="month-nav"><button class="arrow" id="reportPrev">‹</button><div class="month-center"><b id="reportMonthName"></b></div><button class="arrow" id="reportNext">›</button></div>
+    <div class="smart-indicator hidden" id="monthSmartIndicator"></div>
+<div class="carry-box hidden" id="carryBox">
+  <div class="carry-text" id="carryText"></div>
+  <button type="button" class="carry-btn" id="carryButton"></button>
+</div>
+    <div class="card report-block premium-report-card" id="hoursMonthReportCard">
+      <div class="label">Total d'heures</div><div class="big"><span id="reportTotal">0</span></div>
+      <div class="breakdown"><div class="break-row"><span>Heures de prédication</span><strong id="reportPreach">0 h</strong></div><div class="break-row"><span>Heures Béthel/LDC</span><strong id="reportBethel">0 h</strong></div><div class="break-row"><span>Cours bibliques du mois</span><strong id="reportCourses">0</strong></div></div>
+    </div>
+    <div class="card hidden" id="publisherMonthReportCard"><div class="publisher-report-line"><b>Prêché durant le mois</b><input type="checkbox" id="reportPublisherPreached" disabled></div><div class="publisher-report-line"><b>Cours bibliques</b><strong id="reportPublisherCourses">0</strong></div></div>
+  </div>
+  <div id="yearReport" hidden>
+    <div class="month-nav"><button class="arrow" id="yearPrev">‹</button><div class="month-center"><b id="reportYearName"></b><span>année de service • septembre à août</span></div><button class="arrow" id="yearNext">›</button></div>
+    <div class="smart-indicator hidden" id="yearSmartIndicator"></div>
+    <div class="card report-block premium-report-card">
+      <div class="label">Total de l'année</div><div class="big"><span id="yearTotal">0</span></div>
+      <div class="breakdown"><div class="break-row"><span>Heures de prédication</span><strong id="yearPreach">0 h</strong></div><div class="break-row"><span>Heures Béthel/LDC</span><strong id="yearBethel">0 h</strong></div><div class="break-row" id="yearGoalRow"><span>Objectif annuel</span><strong id="yearGoalLabel">600 h</strong></div></div>
+      <div class="progress" id="yearProgressWrap"><div id="yearProgress"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="screen premium-screen" id="calendarScreen">
+  <div class="page-sub">Programme et objectifs prévus</div>
+  <div class="month-nav"><button class="arrow" id="calPrev">‹</button><div class="month-center"><b id="calMonthName"></b></div><button class="arrow" id="calNext">›</button></div>
+  <div class="aux-row hidden" id="publisherAuxRow"><span class="label">Pionnier auxiliaire ce mois</span><select id="publisherAuxSelect"><option value="0">Non</option><option value="15">15 h</option><option value="30">30 h</option></select></div><div class="calendar-info"><div><span>Objectif du mois</span><br><b id="calMonthGoal">0 h</b><div class="planned-total hidden" id="calPlannedTotalWrap">Total prévu : <b id="calPlannedTotal">0 h</b></div></div><button class="smallbtn" id="editYearGoal"><span id="calGoalButtonLabel">Objectif annuel :</span> <span id="calYearGoal">600</span> h</button></div>
+  <div class="smart-indicator hidden" id="calendarSmartIndicator"></div>
+  <div class="reset-actions"><button class="smallbtn" id="calCurrent">Année en cours</button><button class="smallbtn resetbtn" id="resetMonthPlan">Remise à zéro du mois</button><button class="smallbtn resetbtn" id="resetYearPlan">Remise à zéro de l’année</button></div>
+  <div class="card calendar-card">
+    <div class="weekdays"><div class="weekday">L</div><div class="weekday">M</div><div class="weekday">M</div><div class="weekday">J</div><div class="weekday">V</div><div class="weekday">S</div><div class="weekday">D</div></div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+    <div class="legend"><span><i class="p"></i>Prédication</span><span><i class="b"></i>Béthel/LDC</span><span>Touche un jour pour modifier</span></div>
+  </div>
+</section>
+</div>
+
+<dialog id="activityDialog"><form class="modal" method="dialog">
+<h2 id="activityTitle">Ajouter une activité</h2>
+<input type="hidden" id="activityId">
+<div class="field"><label>Date</label><input type="date" id="activityDate" required></div>
+<div class="field hidden" id="activityPreachedField"><label><input type="checkbox" id="activityPreached"> Prêché durant le mois</label></div>
+<div id="activityHoursRow" class="compact-time-grid">
+  <button type="button" class="compact-time-card" id="preachTimeButton"><span>Heures de prédication</span><strong id="preachTimeValue">0:00h</strong></button>
+  <input type="hidden" id="activityPreach" value="0">
+  <button type="button" class="compact-time-card" id="bethelTimeButton"><span>Heures Béthel/LDC</span><strong id="bethelTimeValue">0:00h</strong></button>
+  <input type="hidden" id="activityBethel" value="0">
+</div>
+<div class="field"><label>Cours bibliques différents</label><input type="number" id="activityCourses" min="0" step="1" value="0"></div>
+<div class="field"><label>Activité / note</label><textarea id="activityNote" rows="3" placeholder="Ex. porte-à-porte, cours biblique…"></textarea></div>
+<div class="modal-actions"><button type="button" class="btn danger" id="deleteActivity">Supprimer</button><button value="cancel" class="btn">Annuler</button><button type="button" class="btn primary" id="saveActivity">Enregistrer</button></div>
+</form></dialog>
+
+<dialog id="planDialog"><form class="modal" method="dialog">
+<h2>Programme du jour</h2>
+<div class="field"><label>Date</label><input id="planDate" type="date" readonly></div>
+<div class="field"><label>Activité prévue</label><select id="planType"><option value="Prédication">Prédication</option><option value="Béthel/LDC">Béthel/LDC</option></select></div>
+<div class="field"><label>Heures à faire</label><input id="planHours" type="number" min="0" step="0.25" value="0"></div>
+<div class="field"><label>Note</label><input id="planNote" type="text" placeholder="Ex. dimanche, week-end Béthel…"></div>
+<div class="modal-actions"><button type="button" class="btn danger" id="deletePlan">Supprimer</button><button value="cancel" class="btn">Annuler</button><button type="button" class="btn primary" id="savePlan">Enregistrer</button></div>
+</form></dialog>
+
+<dialog id="profileDialog"><form class="modal" method="dialog"><h2>Profil de service</h2><div class="field"><label>Profil</label><select id="profileSelect"><option value="publisher">Proclamateur</option><option value="aux30">Pionnier auxiliaire permanent — 30 h/mois</option><option value="regular600">Pionnier permanent — 600 h/an</option><option value="special90">Pionnier spécial / missionnaire — 90 h/mois</option><option value="special100">Pionnier spécial / missionnaire — 100 h/mois</option></select></div><div class="field"><label>À partir de quel mois ?</label><input id="profileFrom" type="month" min="2026-09" max="9999-12"></div><div class="profile-history"><div class="label">Historique des profils</div><div id="profileHistoryList"></div></div><div class="modal-actions"><button value="cancel" class="btn">Annuler</button><button type="button" class="btn primary" id="saveProfile">Enregistrer</button></div></form></dialog>
+
+<dialog id="goalDialog"><form class="modal" method="dialog"><h2>Objectif annuel</h2><div class="field"><label>Heures pour cette année de service</label><input id="goalInput" type="number" min="0" step="1"></div><div class="modal-actions"><button value="cancel" class="btn">Annuler</button><button type="button" class="btn primary" id="saveGoal">Enregistrer</button></div></form></dialog>
+
+
+<dialog id="timePickerDialog" class="picker-sheet">
+  <div class="picker-head" id="timePickerTitle">Choisir une durée</div>
+  <div class="picker-body">
+    <div class="picker-labels"><div>Heures</div><div>Minutes</div></div>
+    <div class="picker-wheels" style="position:relative">
+      <div class="picker-center"></div>
+      <div class="picker-wheel" id="pickerHours"></div>
+      <div class="picker-wheel" id="pickerMinutes"></div>
+    </div>
+  </div>
+  <div class="picker-actions"><button type="button" class="btn" id="pickerCancel">Annuler</button><button type="button" class="btn primary" id="pickerConfirm">Valider</button></div>
+</dialog>
+<dialog id="dataDialog"><form class="modal" method="dialog"><h2>Sauvegarde des données</h2><p class="label" style="line-height:1.5">La sauvegarde crée un fichier sur ton téléphone contenant toutes tes activités, tes rapports, tes profils, tes objectifs et ton calendrier. Pour récupérer tes données sur un nouveau smartphone, envoie-toi ce fichier par e-mail ou par un autre moyen, puis utilise le bouton Importer sur le nouveau téléphone pour restaurer toutes tes données.</p><div class="backup-actions"><button type="button" class="btn primary" id="exportData">Exporter</button><button type="button" class="btn" id="importData">Importer</button></div><input class="file-input" id="importFile" type="file" accept="application/json,.json"><div class="modal-actions"><button value="cancel" class="btn">Fermer</button></div></form></dialog>
+<script src="app.js?v=32" defer></script>
+</body></html>
